@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div id="flash">
+    {% if initial_msg %}<div class="flash ok">{{ initial_msg }}</div>{% endif %}
+    {% if initial_err %}<div class="flash err">{{ initial_err }}</div>{% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Competenze</h2>
+
+    <form
+      method="post"
+      action="/skills/save"
+      hx-post="/skills/save"
+      hx-target="#flash"
+      hx-swap="innerHTML">
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="sticky">Nome</th>
+              <th>Ruolo</th>
+              <th>Obiettore</th>
+              <th>Triage</th>
+              <th>Sala Operatoria</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+              <tr>
+                <td class="sticky">{{ row.name }}</td>
+                <td>
+                  <select name="role_{{ row.idx }}">
+                    {% for opt in role_options %}
+                      <option value="{{ opt }}" {% if row.role == opt %}selected{% endif %}>{{ opt }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+                <td>
+                  <select name="ob_{{ row.idx }}">
+                    <option value="SI" {% if row.ob == "SI" %}selected{% endif %}>SI</option>
+                    <option value="NO" {% if row.ob == "NO" %}selected{% endif %}>NO</option>
+                  </select>
+                </td>
+                <td>
+                  <select name="tri_{{ row.idx }}">
+                    <option value="SI" {% if row.tri == "SI" %}selected{% endif %}>SI</option>
+                    <option value="NO" {% if row.tri == "NO" %}selected{% endif %}>NO</option>
+                  </select>
+                </td>
+                <td>
+                  <select name="so_{{ row.idx }}">
+                    <option value="SI" {% if row.so == "SI" %}selected{% endif %}>SI</option>
+                    <option value="NO" {% if row.so == "NO" %}selected{% endif %}>NO</option>
+                  </select>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row-actions">
+        <button type="submit" class="primary">Salva competenze</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

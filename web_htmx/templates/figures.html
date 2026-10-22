@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div id="flash">
+    {% if initial_msg %}<div class="flash ok">{{ initial_msg }}</div>{% endif %}
+    {% if initial_err %}<div class="flash err">{{ initial_err }}</div>{% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Figure del turno</h2>
+
+    <form
+      method="post"
+      action="/figures/save"
+      hx-post="/figures/save"
+      hx-target="#flash"
+      hx-swap="innerHTML">
+
+      <div class="row-actions">
+        <button type="submit" class="primary">Salva figure</button>
+      </div>
+
+      {% include "partials/figures_grid.html" %}
+    </form>
+  </div>
+{% endblock %}

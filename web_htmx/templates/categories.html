@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div id="flash">
+    {% if initial_msg %}<div class="flash ok">{{ initial_msg }}</div>{% endif %}
+    {% if initial_err %}<div class="flash err">{{ initial_err }}</div>{% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Casistiche speciali</h2>
+
+    <form
+      method="post"
+      action="/categories/save"
+      hx-post="/categories/save"
+      hx-target="#flash"
+      hx-swap="innerHTML">
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="sticky">Nome</th>
+              <th>Categoria</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+              <tr>
+                <td class="sticky">{{ row.name }}</td>
+                <td>
+                  <select name="cat_{{ row.idx }}">
+                    {% for opt in category_options %}
+                      <option value="{{ opt }}" {% if row.category == opt %}selected{% endif %}>{{ opt }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row-actions">
+        <button type="submit" class="primary">Salva categorie</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

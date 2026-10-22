@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+  <h2>{{ employee_name }} — {{ month }}/{{ year }}</h2>
+
+  {% if error %}
+    <div class="flash err">{{ error }}</div>
+  {% endif %}
+
+  {% if message %}
+    <div class="flash ok">{{ message }}</div>
+  {% endif %}
+
+  <p>
+    Puoi richiedere al massimo <strong>3 turni</strong>
+    e <strong>2 riposi</strong>.
+    Le richieste saranno valutate dall'amministratore.
+  </p>
+
+  {% if not requests_open %}
+    <div class="flash warn">
+      Inserimento preferenze chiuso. Puoi consultare i dati già salvati.
+    </div>
+  {% endif %}
+
+  <form method="post" action="/employee/save">
+    <input type="hidden" name="_csrf"
+           value="{{ request.state.csrf_token }}">
+    <input type="hidden" name="revision" value="{{ revision }}">
+
+    <div class="preferences-grid">
+      {% for cell in cells %}
+        <div class="preference-day">
+          <label for="day_{{ cell.day }}">Giorno {{ cell.label }}</label>
+
+          {% if cell.locked %}
+            <div class="tag">{{ cell.value or "Assegnazione amministratore" }}</div>
+          {% else %}
+            <select id="day_{{ cell.day }}" name="d_{{ cell.day }}"
+                    {% if not requests_open %}disabled{% endif %}>
+              <option value="" {% if not cell.value %}selected{% endif %}>
+                Nessuna preferenza
+              </option>
+              <option value="MD" {% if cell.value == "MD" %}selected{% endif %}>
+                Mattina
+              </option>
+              <option value="PD" {% if cell.value == "PD" %}selected{% endif %}>
+                Pomeriggio
+              </option>
+              <option value="ND" {% if cell.value == "ND" %}selected{% endif %}>
+                Notte
+              </option>
+              <option value="RD" {% if cell.value == "RD" %}selected{% endif %}>
+                Riposo
+              </option>
+            </select>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if requests_open %}
+      <div class="row-actions">
+        <button class="primary" type="submit">Salva preferenze</button>
+      </div>
+    {% endif %}
+  </form>
+</div>
+{% endblock %}

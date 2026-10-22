@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="csrf-token" content="{{ request.state.csrf_token }}">
+  <title>{{ title or app_title }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">{{ app_title }}</div>
+
+    {% if request.state.user %}
+      <div class="nav">
+        {% if request.state.user.role == "admin" %}
+          <a href="/config">Configurazione</a>
+          <a href="/skills">Competenze</a>
+          <a href="/categories">Categorie</a>
+          <a href="/ivg">IVG</a>
+          <a href="/form2">Turni specifici</a>
+          <a href="/output">Output</a>
+          <a href="/figures">Figure</a>
+          <a href="/violations">Violazioni</a>
+          <a href="/accounts">Account e richieste</a>
+        {% else %}
+          <a href="/employee">Le mie preferenze</a>
+        {% endif %}
+
+        <a href="/password">Cambia password</a>
+
+        <form action="/logout" method="post">
+          <input type="hidden" name="_csrf"
+                 value="{{ request.state.csrf_token }}">
+          <button type="submit">Esci</button>
+        </form>
+      </div>
+
+      <p class="muted">
+        Accesso: {{ request.state.user.username }}
+      </p>
+    {% endif %}
+  </div>
+
+  <div class="page">
+    {% block content %}{% endblock %}
+  </div>
+
+  <script>
+    window.turniCsrfToken = function () {
+      return document.querySelector(
+        'meta[name="csrf-token"]'
+      ).content;
+    };
+
+    document.addEventListener("htmx:configRequest", function (event) {
+      event.detail.headers["X-CSRF-Token"] = window.turniCsrfToken();
+    });
+
+    document.addEventListener("submit", function (event) {
+      const form = event.target;
+      if (!(form instanceof HTMLFormElement)) return;
+
+      const method = (form.getAttribute("method") || "get").toLowerCase();
+      if (method !== "post") return;
+      if (form.querySelector('input[name="_csrf"]')) return;
+
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "_csrf";
+      input.value = window.turniCsrfToken();
+      form.appendChild(input);
+    }, true);
+  </script>
+</body>
+</html>

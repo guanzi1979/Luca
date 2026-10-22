@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="max-width:440px;margin:30px auto">
+  <h2>Accedi</h2>
+
+  {% if error %}
+    <div class="flash err">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" action="/login">
+    <label for="username">Username</label>
+    <input id="username" name="username" type="text"
+           autocomplete="username" maxlength="64" required>
+
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password"
+           autocomplete="current-password" maxlength="128" required>
+
+    <div class="row-actions">
+      <button class="primary" type="submit">Accedi</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% if table.rows %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          {% for col in table.cols %}
+            <th>{{ col }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in table.rows %}
+          <tr>
+            {% for col in table.cols %}
+              <td>{{ row[col] }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="muted">Nessun dato.</p>
+{% endif %}

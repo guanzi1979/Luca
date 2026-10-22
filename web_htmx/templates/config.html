@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <div id="flash">
+    {% include "partials/flash.html" %}
+  </div>
+  {% if initial_msg %}
+    <div class="flash ok">{{ initial_msg }}</div>
+  {% endif %}
+  {% if initial_err %}
+    <div class="flash err">{{ initial_err }}</div>
+  {% endif %}
+
+  <div class="card">
+    <h2>Configurazione</h2>
+
+    <form
+      method="post"
+      action="/config/save"
+      hx-post="/config/save"
+      hx-target="#flash"
+      hx-swap="innerHTML">
+
+      <div class="form-grid">
+        <div>
+          <label>Numero dipendenti</label>
+          <input type="number" name="num_employees" value="{{ state.num_employees }}" min="1">
+        </div>
+        <div>
+          <label>Mese</label>
+          <input type="number" name="month" value="{{ state.month }}" min="1" max="12">
+        </div>
+        <div>
+          <label>Anno</label>
+          <input type="number" name="year" value="{{ state.year }}" min="2024">
+        </div>
+        <div>
+          <label>Seed</label>
+          <input type="number" name="seed" value="{{ state.seed }}" min="1">
+        </div>
+
+        <div>
+          <label>Turni/riposi desiderati</label>
+          <select name="desiderata_mode">
+            <option value="vincolo forte" {% if state.desiderata_mode == "vincolo forte" %}selected{% endif %}>vincolo forte</option>
+            <option value="vincolo debole" {% if state.desiderata_mode == "vincolo debole" %}selected{% endif %}>vincolo debole</option>
+          </select>
+        </div>
+        <div>
+          <label>Dip per turno M</label>
+          <input type="number" name="min_m" value="{{ state.min_m }}" min="0">
+        </div>
+        <div>
+          <label>Dip per turno P</label>
+          <input type="number" name="min_p" value="{{ state.min_p }}" min="0">
+        </div>
+        <div>
+          <label>Dip per turno N</label>
+          <input type="number" name="min_n" value="{{ state.min_n }}" min="0">
+        </div>
+      </div>
+
+      <div class="row-actions">
+        <label>
+          <input type="checkbox" name="allow_elastic_coverage" {% if state.allow_elastic_coverage %}checked{% endif %}>
+          Abilita coperture elastiche
+        </label>
+      </div>
+
+      <label>Nomi dipendenti, uno per riga</label>
+      <textarea name="names">{{ state.names | join('\n') }}</textarea>
+
+      <div class="row-actions">
+        <button type="submit" class="primary">Salva configurazione</button>
+        <a class="button-link" href="/project/download">Scarica progetto JSON</a>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Carica progetto</h3>
+    <form
+      method="post"
+      action="/project/upload"
+      enctype="multipart/form-data"
+      hx-post="/project/upload"
+      hx-target="#flash"
+      hx-swap="innerHTML">
+      <input type="file" name="file" accept=".json" required>
+      <div class="row-actions">
+        <button type="submit">Carica progetto</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Tutorial</h3>
+    <pre>{{ tutorial_text }}</pre>
+  </div>
+{% endblock %}

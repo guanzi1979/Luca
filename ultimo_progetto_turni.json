@@ -1,0 +1,746 @@
+{
+  "num_employees": 38,
+  "month": 8,
+  "year": 2026,
+  "desiderata_mode": "vincolo debole",
+  "min_m": 7,
+  "min_p": 7,
+  "min_n": 7,
+  "seed": 1,
+  "allow_elastic_coverage": true,
+  "names": [
+    "MOTTA",
+    "ZACCO",
+    "MORNATTA",
+    "CATTANEO",
+    "NASCAMANI",
+    "MIOTTO",
+    "COLOMBO",
+    "GROPPALDI",
+    "SCAVELLO",
+    "NOCERA",
+    "MORETTI",
+    "GAIANI",
+    "SENZACQUA",
+    "BERRA",
+    "GIAMBITTO",
+    "SCHIATTI",
+    "CARBONE",
+    "DODARO",
+    "PELLUCCHI",
+    "MONETA",
+    "CASSARINO",
+    "SANTORO",
+    "POGGETTI",
+    "PELIGRA",
+    "PESSINA",
+    "PREVITALI",
+    "DELLA TORRE",
+    "MENEGHELLO",
+    "LANDONI",
+    "VIGANO'",
+    "SERRA",
+    "LANNI",
+    "BOSI",
+    "GUARNACCIA",
+    "GIOIA",
+    "DIP36",
+    "DIP37",
+    "DIP38"
+  ],
+  "categories": [
+    "CapoSala",
+    "Infermiera di Sala",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard",
+    "Solo ambulatori",
+    "Solo ambulatori",
+    "Turni standard",
+    "Turni standard",
+    "Turni standard"
+  ],
+  "roles": [
+    "CapoSala",
+    "Mezzana",
+    "CapoTurno",
+    "CapoTurno",
+    "Mezzana",
+    "Mezzana",
+    "CapoTurno",
+    "CapoTurno",
+    "Mezzana",
+    "Mezzana",
+    "CapoTurno",
+    "CapoTurno",
+    "Mezzana",
+    "Giovane",
+    "CapoTurno",
+    "CapoTurno",
+    "Mezzana",
+    "Mezzana",
+    "CapoTurno",
+    "Giovane",
+    "Mezzana",
+    "CapoTurno",
+    "CapoTurno",
+    "CapoTurno",
+    "Mezzana",
+    "Giovane",
+    "CapoTurno",
+    "Mezzana",
+    "CapoTurno",
+    "CapoTurno",
+    "Mezzana",
+    "CapoTurno",
+    "Mezzana",
+    "CapoTurno",
+    "CapoTurno",
+    "Giovane",
+    "Giovane",
+    "Giovane"
+  ],
+  "obiettore": [
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "SI",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "SI",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "SI",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO",
+    "NO"
+  ],
+  "abil_triage": [
+    "NO",
+    "NO",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "NO",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "NO",
+    "SI",
+    "SI",
+    "NO",
+    "NO",
+    "NO"
+  ],
+  "abil_salaop": [
+    "NO",
+    "NO",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "SI",
+    "NO",
+    "NO",
+    "NO"
+  ],
+  "form2_entries": [
+    {
+      "employee": 0,
+      "day": 2,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 3,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 4,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 5,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 6,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 9,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 10,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 11,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 12,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 13,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 16,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 17,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 18,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 19,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 20,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 23,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 24,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 25,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 26,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 27,
+      "value": "G"
+    },
+    {
+      "employee": 0,
+      "day": 30,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 2,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 3,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 4,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 5,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 6,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 9,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 10,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 11,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 12,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 13,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 16,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 17,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 18,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 19,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 20,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 23,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 24,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 25,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 26,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 27,
+      "value": "G"
+    },
+    {
+      "employee": 1,
+      "day": 30,
+      "value": "G"
+    },
+    {
+      "employee": 33,
+      "day": 2,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 3,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 4,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 5,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 6,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 9,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 10,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 11,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 12,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 13,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 16,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 17,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 18,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 19,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 20,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 23,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 24,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 25,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 26,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 27,
+      "value": "Amb"
+    },
+    {
+      "employee": 33,
+      "day": 30,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 2,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 3,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 4,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 5,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 6,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 9,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 10,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 11,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 12,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 13,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 16,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 17,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 18,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 19,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 20,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 23,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 24,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 25,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 26,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 27,
+      "value": "Amb"
+    },
+    {
+      "employee": 34,
+      "day": 30,
+      "value": "Amb"
+    }
+  ],
+  "figure_assignments": [
+    {
+      "day": 0,
+      "shift": "M",
+      "figure": "Capoturnazione",
+      "name": "CATTANEO"
+    },
+    {
+      "day": 0,
+      "shift": "M",
+      "figure": "SalaOperatoria",
+      "name": "MIOTTO"
+    },
+    {
+      "day": 0,
+      "shift": "M",
+      "figure": "Triage",
+      "name": "GROPPALDI"
+    },
+    {
+      "day": 0,
+      "shift": "P",
+      "figure": "Capoturnazione",
+      "name": "PELLUCCHI"
+    },
+    {
+      "day": 0,
+      "shift": "P",
+      "figure": "SalaOperatoria",
+      "name": "MENEGHELLO"
+    },
+    {
+      "day": 0,
+      "shift": "P",
+      "figure": "Triage",
+      "name": "SANTORO"
+    },
+    {
+      "day": 24,
+      "shift": "P",
+      "figure": "Capoturnazione",
+      "name": "MORNATTA"
+    }
+  ],
+  "output_overrides": [],
+  "ivg_by_week": [
+    {
+      "week_idx": 0,
+      "value": "Lun"
+    },
+    {
+      "week_idx": 1,
+      "value": "Lun"
+    },
+    {
+      "week_idx": 2,
+      "value": "Lun"
+    },
+    {
+      "week_idx": 3,
+      "value": "Lun"
+    },
+    {
+      "week_idx": 4,
+      "value": "Lun"
+    },
+    {
+      "week_idx": 5,
+      "value": "Lun"
+    }
+  ],
+  "previous_hours_by_employee": [],
+  "previous_fatigue_by_employee": []
+}

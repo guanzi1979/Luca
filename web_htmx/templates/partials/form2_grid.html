@@ -1,0 +1,30 @@
+<div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="sticky">Dipendente</th>
+          {% for info in infos %}
+            <th class="{% if info.is_holiday %}day-hol{% elif info.is_sunday %}day-sun{% elif info.is_saturday %}day-sat{% endif %}">
+              {{ info.header_label }}
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td class="sticky">{{ row.label }}</td>
+            {% for cell in row.cells %}
+              <td>
+                <select name="{{ cell.name }}" class="small-select">
+                  {% for val in form2_values %}
+                    <option value="{{ val }}" {% if cell.value == val %}selected{% endif %}>{{ val }}</option>
+                  {% endfor %}
+                </select>
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>

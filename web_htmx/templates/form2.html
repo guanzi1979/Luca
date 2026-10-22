@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div id="flash">
+    {% if initial_msg %}<div class="flash ok">{{ initial_msg }}</div>{% endif %}
+    {% if initial_err %}<div class="flash err">{{ initial_err }}</div>{% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Turni specifici - {{ state.month }}/{{ state.year }}</h2>
+    <p class="muted">
+      Amb, G, F, A, Pr, Ag = assegnazioni fisse |
+      MD, PD, ND = turni desiderati |
+      RD = riposo desiderato
+    </p>
+
+    <div class="row-actions">
+      <button type="button" onclick="saveForm2Grid()">Salva turni specifici</button>
+      <button type="button" onclick="verifyForm2Grid()">Verifica input</button>
+      <button type="button" class="primary" onclick="solveForm2Grid()">Genera turni</button>
+      <button
+        type="button"
+        hx-post="/overrides/clear"
+        hx-target="#flash"
+        hx-swap="innerHTML">
+        Rimuovi tutti gli override
+      </button>
+      <span id="grid-status" class="muted"></span>
+    </div>
+
+    <div class="row-actions">
+      <span class="legend-box legend-fixed"></span><span class="legend-text">Assegnazioni fisse</span>
+      <span class="legend-box legend-desired"></span><span class="legend-text">Desiderata</span>
+      <span class="legend-box legend-rest"></span><span class="legend-text">Riposo desiderato</span>
+      <span class="legend-box legend-prefilled"></span><span class="legend-text">Categoria prefissata, modifica bloccata</span>
+    </div>
+
+    <div id="form2-grid" class="ag-theme-alpine" style="height: 72vh; width: 100%;"></div>
+  </div>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-theme-alpine.css">
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@31.3.2/dist/ag-grid-community.min.js"></script>
+
+  <script>
+    let form2GridApi = null;
+
+    const FIXED_VALUES = new Set(["Amb", "G", "F", "A", "Pr", "Ag"]);
+    const DESIRED_VALUES = new Set(["MD", "PD", "ND"]);
+    const REST_VALUES = new Set(["RD"]);
+
+    function setFlash(message, type = "ok", warnings = []) {
+      const flash = document.getElementById("flash");
+      flash.replaceChildren();
+
+      if (message) {
+        const box = document.createElement("div");
+        box.className = "flash " + (
+          ["ok", "err", "warn"].includes(type) ? type : "err"
+        );
+        box.textContent = message;
+        flash.appendChild(box);
+      }
+
+      if (warnings.length) {
+        const box = document.createElement("div");
+        box.className = "flash warn";
+
+        const title = document.createElement("strong");
+        title.textContent = "Avvisi";
+        box.appendChild(title);
+
+        const list = document.createElement("ul");
+
+        warnings.forEach(message => {
+          const item = document.createElement("li");
+          item.textContent = message;
+          list.appendChild(item);
+        });
+
+        box.appendChild(list);
+        flash.appendChild(box);
+      }
+    }    
+
+    function setStatus(text) {
+      document.getElementById("grid-status").textContent = text || "";
+    }
+
+    function isDayField(field) {
+      return typeof field === "string" && field.startsWith("d_");
+    }
+
+    function isPrefilledRow(data) {
+      return !!data.prefilledCategory;
+    }
+
+    function getGridRows() {
+      const rows = [];
+      form2GridApi.forEachNode(node => rows.push(node.data));
+      return rows;
+    }
+
+    function cellClassRules() {
+      return {
+        "cell-fixed": (params) => FIXED_VALUES.has((params.value || "").trim()),
+        "cell-desired": (params) => DESIRED_VALUES.has((params.value || "").trim()),
+        "cell-rest": (params) => REST_VALUES.has((params.value || "").trim()),
+        "cell-prefilled-lock": (params) => isDayField(params.colDef.field) && isPrefilledRow(params.data),
+      };
+    }
+
+    function editableCell(params) {
+      if (!isDayField(params.colDef.field)) return false;
+      if (isPrefilledRow(params.data)) return false;
+      return true;
+    }
+
+    function normalizeGridColumns(columns, allowedValues) {
+      return columns.map((col) => {
+        if (!isDayField(col.field)) {
+          return col;
+        }
+        return {
+          ...col,
+          editable: editableCell,
+          singleClickEdit: true,
+          cellEditor: "agSelectCellEditor",
+          cellEditorParams: { values: allowedValues },
+          cellClassRules: cellClassRules(),
+        };
+      });
+    }
+
+    async function loadForm2Grid() {
+      setStatus("Caricamento...");
+      const res = await fetch("/api/form2-grid");
+      const data = await res.json();
+
+      const columnDefs = normalizeGridColumns(data.columns, data.allowedValues);
+
+      const gridOptions = {
+        columnDefs,
+        rowData: data.rows,
+        defaultColDef: {
+          sortable: false,
+          filter: false,
+          resizable: true
+        },
+        singleClickEdit: true,
+        stopEditingWhenCellsLoseFocus: true,
+        rowHeight: 34,
+        headerHeight: 34,
+        suppressMovableColumns: false,
+        enableRangeSelection: true,
+        enableRangeHandle: true,
+        enableFillHandle: true,
+        undoRedoCellEditing: true,
+        undoRedoCellEditingLimit: 50,
+        suppressRowClickSelection: true,
+        ensureDomOrder: true,
+        processCellFromClipboard: (params) => {
+          if (!isDayField(params.column.getColDef().field)) return params.value;
+
+          const rowNode = params.node;
+          if (rowNode?.data?.prefilledCategory) {
+            return rowNode.data[params.column.getColDef().field];
+          }
+
+          const value = String(params.value ?? "").trim();
+          if (!data.allowedValues.includes(value)) {
+            return "";
+          }
+          return value;
+        },
+        processCellForClipboard: (params) => {
+          return params.value ?? "";
+        },
+        onCellValueChanged: (params) => {
+          if (!isDayField(params.colDef.field)) return;
+          const value = String(params.newValue ?? "").trim();
+          if (!data.allowedValues.includes(value)) {
+            params.node.setDataValue(params.colDef.field, "");
+          }
+        }
+      };
+
+      const gridDiv = document.querySelector("#form2-grid");
+      form2GridApi = agGrid.createGrid(gridDiv, gridOptions);
+      setStatus("");
+    }
+
+    async function postGrid(url) {
+      if (!form2GridApi) {
+        setFlash("Grid non inizializzata.", "err");
+        return null;
+      }
+      form2GridApi.stopEditing();
+      setStatus("Elaborazione...");
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": window.turniCsrfToken()
+          },
+          body: JSON.stringify({
+            rows: getGridRows()
+          })
+        });
+
+        const data = await res.json();
+        setStatus("");
+        return data;
+      } catch (err) {
+        setStatus("");
+        setFlash(String(err), "err");
+        return null;
+      }
+    }
+
+    async function saveForm2Grid() {
+      const data = await postGrid("/api/form2-grid/save");
+      if (!data) return;
+      if (!data.ok) {
+        setFlash(data.error || "Errore salvataggio", "err");
+        return;
+      }
+      setFlash(data.message || "Turni specifici salvati.", "ok");
+    }
+
+    async function verifyForm2Grid() {
+      const data = await postGrid("/api/form2-grid/verify");
+      if (!data) return;
+      if (!data.ok) {
+        setFlash(data.error || "Errore verifica", "err");
+        return;
+      }
+      setFlash(data.message || "Input coerenti.", "ok", data.warnings || []);
+    }
+
+    async function solveForm2Grid() {
+      const data = await postGrid("/api/form2-grid/solve");
+      if (!data) return;
+      if (!data.ok) {
+        setFlash(data.error || "Errore solve", "err");
+        return;
+      }
+      if (data.redirect) {
+        window.location.href = data.redirect;
+      } else {
+        setFlash("Soluzione generata.", "ok");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadForm2Grid);
+  </script>
+{% endblock %}

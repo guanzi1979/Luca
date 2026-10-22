@@ -1,0 +1,50 @@
+{% if rows %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Giorno</th>
+          <th>Turno</th>
+          <th>Note</th>
+          <th>Capoturnazione</th>
+          <th>SalaOperatoria</th>
+          <th>Triage</th>
+          <th>Jolly</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>{{ row.day_label }}</td>
+            <td>{{ row.shift }}</td>
+            <td>{{ row.note }}</td>
+            <td>
+              <select name="fig_{{ row.day_idx }}_{{ row.shift }}_capo">
+                {% for opt in row.capo_options %}
+                  <option value="{{ opt }}" {% if row.capo == opt %}selected{% endif %}>{{ opt }}</option>
+                {% endfor %}
+              </select>
+            </td>
+            <td>
+              <select name="fig_{{ row.day_idx }}_{{ row.shift }}_sala">
+                {% for opt in row.sala_options %}
+                  <option value="{{ opt }}" {% if row.sala == opt %}selected{% endif %}>{{ opt }}</option>
+                {% endfor %}
+              </select>
+            </td>
+            <td>
+              <select name="fig_{{ row.day_idx }}_{{ row.shift }}_tri">
+                {% for opt in row.tri_options %}
+                  <option value="{{ opt }}" {% if row.tri == opt %}selected{% endif %}>{{ opt }}</option>
+                {% endfor %}
+              </select>
+            </td>
+            <td>{{ row.jolly }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="muted">Nessuna soluzione disponibile.</p>
+{% endif %}

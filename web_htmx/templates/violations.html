@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% if initial_msg %}
+    <div class="flash ok">{{ initial_msg }}</div>
+  {% endif %}
+  {% if initial_err %}
+    <div class="flash err">{{ initial_err }}</div>
+  {% endif %}
+
+  <div class="card">
+    <h2>Vincoli forti</h2>
+    {% if hard %}
+      <pre>{{ hard | join('\n') }}</pre>
+    {% else %}
+      <p class="muted">Nessuna violazione rilevata.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Vincoli deboli</h2>
+    {% if soft %}
+      <pre>{{ soft | join('\n') }}</pre>
+    {% else %}
+      <p class="muted">Nessuna violazione rilevata.</p>
+    {% endif %}
+  </div>
+{% endblock %}

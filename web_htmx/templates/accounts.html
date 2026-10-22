@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if error %}
+  <div class="flash err">{{ error }}</div>
+{% endif %}
+{% if message %}
+  <div class="flash ok">{{ message }}</div>
+{% endif %}
+
+<div class="card">
+  <h2>Inserimento preferenze</h2>
+  <p>
+    Stato:
+    <strong>{{ "APERTO" if requests_open else "CHIUSO" }}</strong>
+  </p>
+
+  <form action="/accounts/requests" method="post">
+    <input type="hidden" name="_csrf"
+           value="{{ request.state.csrf_token }}">
+    <input type="hidden" name="open"
+           value="{{ '0' if requests_open else '1' }}">
+    <button class="primary" type="submit">
+      {{ "Chiudi inserimento" if requests_open else "Apri inserimento" }}
+    </button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Crea account dipendente</h2>
+
+  {% if available %}
+    <form action="/accounts/create" method="post">
+      <input type="hidden" name="_csrf"
+             value="{{ request.state.csrf_token }}">
+
+      <label>Dipendente</label>
+      <select name="employee_id" required>
+        {% for employee in available %}
+          <option value="{{ employee.id }}">{{ employee.name }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Username</label>
+      <input type="text" name="username" minlength="3" maxlength="64"
+             pattern="[a-z0-9][a-z0-9._-]{2,63}"
+             autocomplete="off" required>
+
+      <label>Password iniziale, minimo 12 caratteri</label>
+      <input type="password" name="password"
+             minlength="12" maxlength="128"
+             autocomplete="new-password" required>
+
+      <div class="row-actions">
+        <button class="primary" type="submit">Crea account</button>
+      </div>
+    </form>
+  {% else %}
+    <p>Tutti i dipendenti hanno già un account.</p>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Account esistenti</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Ruolo</th>
+          <th>Dipendente</th>
+          <th>Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+          <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.role }}</td>
+            <td>{{ user.employee_name }}</td>
+            <td>
+              {% if user.role == "employee" %}
+                <form action="/accounts/delete" method="post"
+                      onsubmit="return confirm('Rimuovere questo account?')">
+                  <input type="hidden" name="_csrf"
+                         value="{{ request.state.csrf_token }}">
+                  <input type="hidden" name="user_id" value="{{ user.id }}">
+                  <button type="submit">Rimuovi account</button>
+                </form>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="muted">
+    La rimozione dell'account revoca gli accessi, ma non cancella
+    le preferenze del dipendente.
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div id="flash">
+    {% if initial_msg %}<div class="flash ok">{{ initial_msg }}</div>{% endif %}
+    {% if initial_err %}<div class="flash err">{{ initial_err }}</div>{% endif %}
+  </div>
+
+  <div class="card">
+    <h2>IVG</h2>
+
+    <form
+      method="post"
+      action="/ivg/save"
+      hx-post="/ivg/save"
+      hx-target="#flash"
+      hx-swap="innerHTML">
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Settimana</th>
+              <th>Range giorni</th>
+              <th>IVG</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+              <tr>
+                <td>{{ row.label }}</td>
+                <td>{{ row.days_range }}</td>
+                <td>
+                  <select name="ivg_{{ row.idx }}">
+                    {% for opt in options %}
+                      <option value="{{ opt }}" {% if row.value == opt %}selected{% endif %}>{{ opt }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row-actions">
+        <button type="submit" class="primary">Salva IVG</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

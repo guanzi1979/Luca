@@ -1,0 +1,18 @@
+{% if msg %}
+  <div class="flash ok">{{ msg }}</div>
+{% endif %}
+
+{% if err %}
+  <div class="flash err">{{ err }}</div>
+{% endif %}
+
+{% if warn_list %}
+  <div class="flash warn">
+    <strong>Warning</strong>
+    <ul>
+      {% for w in warn_list %}
+        <li>{{ w }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
