@@ -1,0 +1,63 @@
+versione FastAPI + HTMX
+
+pip install -r requirements.txt
+python -m web_htmx.accounts create-admin amministratore
+python main.py
+
+http://127.0.0.1:8000
+
+
+MODIFICATO PER FARLO FUNZIONAR EIN HOME-ASSISTANT
+1) posiziono i file qui:
+
+/addons/turni_dipendenti/
+├── config.yaml
+├── Dockerfile
+├── addon_start.py
+├── main.py
+├── requirements.txt
+├── constants.py
+├── persistence.py
+├── solver.py
+├── state.py
+├── utils.py
+├── ultimo_progetto_turni.json
+└── web_htmx/
+    ├── __init__.py
+    ├── app.py
+    ├── accounts.py
+    ├── static/
+    │   └── style.css
+    └── templates/
+        ├── base.html
+        ├── login.html
+        ├── employee.html
+        ├── accounts.html
+        ├── password.html
+        └── ...gli altri template...
+
+
+2) Apri lo store degli add-on e aggiorna l’elenco.
+3) Cerca Turni Dipendenti nella sezione degli add-on locali.
+4) Premi Installa.
+5) Nella configurazione imposta:
+- public_url: l’indirizzo esatto che userai nel browser;
+- initial_admin_username: il nome dell’amministratore;
+- initial_admin_password: una password iniziale di almeno 12 caratteri.
+6) Avvia l’add-on.
+
+Per una prima prova nella rete locale, public_url deve essere, per esempio:
+http://192.168.1.100:8090
+Usa l’IP effettivo del mini-PC, poi apri esattamente quell’indirizzo.
+Dopo il primo accesso, cambia la password nell’app e svuota initial_admin_password nella configurazione dell’add-on. L’account già creato rimane nel database.
+
+Collegamento con Caddy2
+Quando passi all’accesso esterno, imposta nell’add-on:
+public_url: https://turni-esempio.duckdns.org
+Un blocco Caddy indicativo è:
+caddyfile
+turni-esempio.duckdns.org {
+    reverse_proxy 192.168.1.100:8090
+}
+Sostituisci dominio e IP con quelli reali. Questo blocco va aggiunto alla configurazione esistente, non deve sostituire quello di Home Assistant. Il nuovo nome DuckDNS deve puntare alla tua connessione e Caddy deve poter ottenere il certificato HTTPS.
+Il database sarà conservato in /data/turni.sqlite3, separato dai file dell’app. Includi l’add-on nei backup di Home Assistant e verifica il ripristino prima dell’uso effettivo.

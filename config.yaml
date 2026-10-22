@@ -1,0 +1,25 @@
+name: "Turni Dipendenti"
+version: "1.0.0"
+slug: "turni_dipendenti"
+description: "Preferenze personali e generazione turni con FastAPI e HTMX"
+arch:
+  - amd64
+startup: application
+boot: auto
+init: false
+
+ports:
+  8000/tcp: 8090
+
+ports_description:
+  8000/tcp: "Applicazione web turni"
+
+options:
+  public_url: "http://localhost:8090"
+  initial_admin_username: "amministratore"
+  initial_admin_password: ""
+
+schema:
+  public_url: url
+  initial_admin_username: str
+  initial_admin_password: password
