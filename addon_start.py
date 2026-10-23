@@ -22,7 +22,12 @@ def main():
     os.environ["TURNI_TRUSTED_PROXY_IPS"] = "127.0.0.1"
 
     from persistence import connect_db, load_autosave
-    from web_htmx.accounts import initialize_accounts, create_user
+    from web_htmx.accounts import (
+        initialize_accounts,
+        create_user,
+        normalized_username,
+        password_hash,
+    )
 
     # Importa il progetto JSON esistente soltanto al primo avvio.
     load_autosave()
@@ -47,6 +52,48 @@ def main():
 
         create_user(username, password, "admin")
         print("Account amministratore iniziale creato.")
+
+    if options.get("reset_admin_password", False):
+        username = normalized_username(
+            options.get("initial_admin_username", "amministratore")
+        )
+        new_password = str(options.get("initial_admin_password", ""))
+
+        # Verifica anche la lunghezza minima della nuova password.
+        encoded = password_hash(new_password)
+
+        with connect_db() as db:
+            admin = db.execute("""
+                SELECT id
+                FROM users
+                WHERE username = ? AND role = 'admin'
+            """, (username,)).fetchone()
+
+            if admin is None:
+                raise RuntimeError(
+                    "Ripristino password: amministratore non trovato. "
+                    "Controlla initial_admin_username."
+                )
+
+            db.execute("""
+                UPDATE users SET password_hash = ? WHERE id = ?
+            """, (encoded, admin["id"]))
+
+            # Revoca le sessioni esistenti e sblocca i tentativi di login.
+            db.execute(
+                "DELETE FROM sessions WHERE user_id = ?",
+                (admin["id"],),
+            )
+            db.execute(
+                "DELETE FROM login_failures WHERE username = ?",
+                (username,),
+            )
+
+        print(
+            "Password amministratore aggiornata. "
+            "Disattiva reset_admin_password e svuota "
+            "initial_admin_password nella configurazione."
+        )
 
     import uvicorn
 
