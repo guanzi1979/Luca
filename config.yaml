@@ -18,8 +18,10 @@ options:
   public_url: "http://localhost:8090"
   initial_admin_username: "amministratore"
   initial_admin_password: ""
+  reset_admin_password: false
 
 schema:
   public_url: url
   initial_admin_username: str
   initial_admin_password: password
+  reset_admin_password: bool
