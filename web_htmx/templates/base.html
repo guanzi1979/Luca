@@ -4,47 +4,115 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="csrf-token" content="{{ request.state.csrf_token }}">
+  <meta name="theme-color" content="#173b45">
+
   <title>{{ title or app_title }}</title>
-  <link rel="stylesheet" href="/static/style.css">
+
+  <link rel="stylesheet" href="/static/style.css?v=2">
   <script src="https://unpkg.com/htmx.org@1.9.12"></script>
 </head>
-<body>
-  <div class="topbar">
-    <div class="brand">{{ app_title }}</div>
 
-    {% if request.state.user %}
-      <div class="nav">
-        {% if request.state.user.role == "admin" %}
-          <a href="/config">Configurazione</a>
-          <a href="/skills">Competenze</a>
-          <a href="/categories">Categorie</a>
-          <a href="/ivg">IVG</a>
-          <a href="/form2">Turni specifici</a>
-          <a href="/output">Output</a>
-          <a href="/figures">Figure</a>
-          <a href="/violations">Violazioni</a>
-          <a href="/accounts">Account e richieste</a>
-        {% else %}
-          <a href="/employee">Le mie preferenze</a>
+{% set user = request.state.user %}
+{% set current_path = request.url.path %}
+
+{% macro nav_link(path, label, icon) %}
+  <a href="{{ path }}"
+     class="nav-item{% if current_path == path %} active{% endif %}"
+     {% if current_path == path %}aria-current="page"{% endif %}>
+    <span class="nav-icon" aria-hidden="true">{{ icon }}</span>
+    <span>{{ label }}</span>
+  </a>
+{% endmacro %}
+
+<body class="{{ 'signed-in' if user else 'signed-out' }}">
+  <a class="skip-link" href="#main-content">Vai al contenuto</a>
+
+  <div class="app-layout">
+    <header class="app-sidebar">
+      <a href="/" class="app-brand" aria-label="Turni, pagina iniziale">
+        <span class="brand-mark" aria-hidden="true">T</span>
+        <span>
+          <strong>Turni</strong>
+          <small>Pianificazione mensile</small>
+        </span>
+      </a>
+
+      {% if user %}
+        <p class="sidebar-caption">
+          {{ "Amministrazione" if user.role == "admin" else "Area personale" }}
+        </p>
+
+        <nav class="app-nav" aria-label="Navigazione principale">
+          {% if user.role == "admin" %}
+            {{ nav_link("/config", "Configurazione", "◈") }}
+            {{ nav_link("/skills", "Competenze", "◎") }}
+            {{ nav_link("/categories", "Categorie", "▤") }}
+            {{ nav_link("/ivg", "IVG", "▦") }}
+            {{ nav_link("/form2", "Turni specifici", "▣") }}
+            {{ nav_link("/output", "Tabella turni", "▥") }}
+            {{ nav_link("/figures", "Figure", "◇") }}
+            {{ nav_link("/violations", "Verifiche", "✓") }}
+            {{ nav_link("/accounts", "Account e richieste", "○") }}
+          {% else %}
+            {{ nav_link("/employee", "Le mie preferenze", "▦") }}
+          {% endif %}
+
+          {{ nav_link("/password", "Cambia password", "⌘") }}
+        </nav>
+
+        <div class="sidebar-user">
+          <span class="user-avatar" aria-hidden="true">
+            {{ user.username[:1] | upper }}
+          </span>
+
+          <div class="user-details">
+            <strong>{{ user.username }}</strong>
+            <small>
+              {{ "Amministratore" if user.role == "admin" else "Dipendente" }}
+            </small>
+          </div>
+
+          <form action="/logout" method="post">
+            <input type="hidden" name="_csrf"
+                   value="{{ request.state.csrf_token }}">
+            <button type="submit" class="logout-button">Esci</button>
+          </form>
+        </div>
+      {% else %}
+        <div class="sidebar-welcome">
+          <p class="sidebar-caption">Il tuo spazio di lavoro</p>
+          <h2>Organizzare il mese, con semplicità.</h2>
+          <p>
+            Preferenze personali e pianificazione dei turni,
+            in un unico posto.
+          </p>
+        </div>
+      {% endif %}
+    </header>
+
+    <div class="app-main">
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">
+            {{ "Area amministratore" if user and user.role == "admin"
+               else "Portale dipendenti" }}
+          </p>
+          <h1>{{ title or "Pianificazione turni" }}</h1>
+        </div>
+
+        {% if user %}
+          <span class="session-badge">Accesso effettuato</span>
         {% endif %}
-
-        <a href="/password">Cambia password</a>
-
-        <form action="/logout" method="post">
-          <input type="hidden" name="_csrf"
-                 value="{{ request.state.csrf_token }}">
-          <button type="submit">Esci</button>
-        </form>
       </div>
 
-      <p class="muted">
-        Accesso: {{ request.state.user.username }}
-      </p>
-    {% endif %}
-  </div>
+      <main id="main-content" class="page" tabindex="-1">
+        {% block content %}{% endblock %}
+      </main>
 
-  <div class="page">
-    {% block content %}{% endblock %}
+      <footer class="app-footer">
+        Turni · Pianificazione e preferenze
+      </footer>
+    </div>
   </div>
 
   <script>
