@@ -6,6 +6,10 @@ python main.py
 
 http://127.0.0.1:8000
 
+PER RESETTARE PASSWORD
+Usa questi comandi
+cd /app
+python -m web_htmx.accounts reset-password amministratore
 
 MODIFICATO PER FARLO FUNZIONAR EIN HOME-ASSISTANT
 1) posiziono i file qui:
